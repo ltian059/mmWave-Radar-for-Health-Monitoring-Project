@@ -6,6 +6,7 @@ import time
 import sys
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
+import Configuration
 sys.stdout.reconfigure(line_buffering=True)
 """
 File: test.py
@@ -50,11 +51,11 @@ Notes:
 Author:
     Li Tian
 """
-
 # Define paths
-model_path = "./epoch155.pt"  # Modify to your model file path
-input_folder = "./input_data"  # Folder where data files will arrive
-output_folder = "./output"
+model_path = Configuration.MODEL_PATH # Modify to your model file path
+input_folder = Configuration.MODEL_DATA_INPUT_FOLDER  # Folder where data files will arrive
+output_folder = Configuration.MODEL_OUTPUT_FOLDER
+
 
 # Check device
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
