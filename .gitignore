@@ -2,3 +2,10 @@
 *.txt
 
 ./.venv
+=======
+# Ignore all .zip files
+*.zip
+
+# Ignore specific folder
+testModel1/8_pkl_data_1031-800-600-600/
+
