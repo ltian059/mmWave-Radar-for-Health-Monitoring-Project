@@ -5,10 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fb8fb78d-bff0-48c9-a32f-0cc909e4ff03" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/testModel1.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/testModel1.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/output/model_output.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/output/output_input.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Configuration.py" beforeDir="false" afterPath="$PROJECT_DIR$/Configuration.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GUIDEV_6843_WITHOUT_GUI_HVRAE_ppl_counting_modified_11.1.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_jetson.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GUIDEV_6843_WITH_GUI_HVRAE_ppl_counting_modified_11.1.py" beforeDir="false" afterPath="$PROJECT_DIR$/GUIDEV_6843_WITH_GUI_HVRAE_ppl_counting_modified_11.1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Poinact.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/Poinact.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PointNet.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/PointNet.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PointNet_lstm.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/PointNet_lstm.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TimeDistributed.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/TimeDistributed.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config.ini" beforeDir="false" afterPath="$PROJECT_DIR$/config.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/epoch155.pt" beforeDir="false" afterPath="$PROJECT_DIR$/lib/epoch155.pt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,9 +44,17 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Python.Configuration.executor": "Debug",
+    "Python.GUIDEV_6843_WITHOUT_GUI_HVRAE_ppl_counting_modified_11.1.executor": "Run",
+    "Python.GUIDEV_6843_WITH_GUI_HVRAE_saad_linux.executor": "Run",
     "Python.MySocket.executor": "Run",
+    "Python.Poinact.executor": "Run",
+    "Python.RadarGUI.executor": "Run",
     "Python.ServerSocket.executor": "Run",
+    "Python.main_jetson.executor": "Run",
     "Python.test.executor": "Run",
+    "Python.testUART.executor": "Run",
+    "Python.utils.executor": "Debug",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "master",
     "last_opened_file_path": "/home/uottawa/PycharmProjects/testModel1/input_data",
@@ -56,6 +71,11 @@
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/input_data" />
       <recent name="$PROJECT_DIR$" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/lib" />
+      <recent name="$PROJECT_DIR$/output" />
     </key>
   </component>
   <component name="SharedIndexes">
@@ -84,6 +104,22 @@
   </component>
   <component name="UnknownFeatures">
     <option featureType="com.intellij.fileTypeFactory" implementationName="*.ini" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/utils.py</url>
+          <line>432</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/utils.py</url>
+          <line>351</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/testModel1$test.coverage" NAME="test Coverage Results" MODIFIED="1730250714048" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />

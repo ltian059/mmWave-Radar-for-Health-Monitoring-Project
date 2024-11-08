@@ -1312,7 +1312,7 @@ model = model.to(device)
 
 previous_pc = "empty"
 previous_df = pd.DataFrame()
-csv_file_path = 'radar_data_24.10.21.night.csv'
+csv_file_path = 'output/radar_data_24.10.21.night.csv'
 average_zs = []
 
 model_output_window = []
@@ -1323,7 +1323,7 @@ def append_to_csv(output, file_path):
         writer = csv.writer(file)
         writer.writerow([timestamp, output])
         
-output_csv_file_path = "radar_output_log.csv"
+output_csv_file_path = "output/radar_output_log.csv"
 # Function to save DataFrame to CSV
 def save_to_csv(df, file_path):
     if not df.empty:
