@@ -1,4 +1,4 @@
-# Main script: test.py
+# Main script: main.py
 ## Description:
 This script performs real-time inference on incoming data files using a pre-trained PyTorch model.
 It continuously monitors a specified directory for new `.pkl` files, processes them using the model, 
