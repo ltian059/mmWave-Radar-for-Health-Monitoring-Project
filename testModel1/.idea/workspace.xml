@@ -4,19 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fb8fb78d-bff0-48c9-a32f-0cc909e4ff03" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/testModel1.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/testModel1.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Configuration.py" beforeDir="false" afterPath="$PROJECT_DIR$/Configuration.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GUIDEV_6843_WITHOUT_GUI_HVRAE_ppl_counting_modified_11.1.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_jetson.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GUIDEV_6843_WITH_GUI_HVRAE_ppl_counting_modified_11.1.py" beforeDir="false" afterPath="$PROJECT_DIR$/GUIDEV_6843_WITH_GUI_HVRAE_ppl_counting_modified_11.1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Poinact.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/Poinact.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PointNet.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/PointNet.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PointNet_lstm.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/PointNet_lstm.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TimeDistributed.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/TimeDistributed.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config.ini" beforeDir="false" afterPath="$PROJECT_DIR$/config.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/epoch155.pt" beforeDir="false" afterPath="$PROJECT_DIR$/lib/epoch155.pt" afterDir="false" />
-    </list>
+    <list default="true" id="fb8fb78d-bff0-48c9-a32f-0cc909e4ff03" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
