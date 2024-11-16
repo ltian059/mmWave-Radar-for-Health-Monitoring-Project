@@ -8,7 +8,6 @@ import csv
 import Configuration
 
 output_csv_file_path = Configuration.output_csv_file_path
-csv_file_path = Configuration.csv_file_path
 
 byteBuffer = np.zeros(2**15,dtype = 'uint8')
 byteBufferLength = 0
@@ -26,7 +25,7 @@ all_data_frame = []
 fall_df = pd.DataFrame(columns = ['detected_falls_idx'])
 
 def readAndParseData14xx(Dataport, configParameters, flush_interval=1000):
-    global byteBuffer, byteBufferLength
+    global byteBuffer, byteBufferLength, frame_timestamp
 
     # Constants
     OBJ_STRUCT_SIZE_BYTES = 12
@@ -120,6 +119,18 @@ def readAndParseData14xx(Dataport, configParameters, flush_interval=1000):
         subFrameNumber = np.matmul(byteBuffer[idX:idX + 4], word)
         idX += 4
 
+        # Get the current timestamp
+        frame_timestamp = time.time()
+
+        # Convert the timestamp to a structured time object
+        time_struct = time.localtime(frame_timestamp)
+
+        # Extract milliseconds from the fractional part of the timestamp
+        milliseconds = int((frame_timestamp - int(frame_timestamp)) * 1000)
+
+        # Format the time string
+        frame_timestamp = time.strftime("%H:%M:%S", time_struct) + f":{milliseconds:03d}"
+
         # Read the TLV messages
         for tlvIdx in range(numTLVs):
             word = [1, 2 ** 8, 2 ** 16, 2 ** 24]
@@ -134,6 +145,7 @@ def readAndParseData14xx(Dataport, configParameters, flush_interval=1000):
             # print('TLV type:', tlv_type)
 
             # Read the data depending on the TLV message
+
             if tlv_type == MMWDEMO_OUTPUT_MSG_COMPRESSED_POINTS:
                 # print('we are in 1020')
 
@@ -296,8 +308,9 @@ def readAndParseData14xx(Dataport, configParameters, flush_interval=1000):
             # Check that there are no errors with the buffer length
             if byteBufferLength < 0:
                 byteBufferLength = 0
+        return dataOK, frameNumber, detObj, frame_timestamp
 
-    return dataOK, frameNumber, detObj
+    return dataOK, frameNumber, detObj, None
 
 # Function to save DataFrame to CSV
 def save_to_csv(df, file_path):
@@ -305,6 +318,7 @@ def save_to_csv(df, file_path):
         dir_path = os.path.dirname(file_path)
         if not os.path.exists(dir_path):
             os.makedirs(dir_path)
+        # Save the DataFrame to the new CSV file
         df.to_csv(file_path, mode='a', index=False, header=not os.path.isfile(file_path))
 
 
@@ -342,116 +356,128 @@ def num_to_class(num):
     else:
         return "Transition"
 
-
+processed_frame_numbers = []
 def update(Dataport, configParameters, model, device, gui):
     global s, recent_predictions, alarm_trigger, window, current_window_idx, all_data_frame, fall_df
     global previous_pc, previous_df, average_zs, model_output_window, current_output_index
 
-    dataOk, frameNumber, detObj = readAndParseData14xx(Dataport, configParameters)
+    try:
+        dataOk, frameNumber, detObj, frame_timestamp = readAndParseData14xx(Dataport, configParameters)
 
-    if dataOk:
-        pointCloud = np.array(detObj['pointCloud'])  # (N, 5) array: X, Y, Z, velocity, snr
-        targetIndices = detObj.get('targetIndices', [])  # List of target indices
+        if dataOk:
+            pointCloud = np.array(detObj['pointCloud'])  # (N, 5) array: X, Y, Z, velocity, snr
+            targetIndices = detObj.get('targetIndices', [])  # List of target indices
 
-        # Create a DataFrame for the point cloud
-        df = pd.DataFrame({
-            'Frame Number': frameNumber,
-            'X': pointCloud[:, 0],
-            'Y': pointCloud[:, 1],
-            'Z': pointCloud[:, 2],
-            'velocity': pointCloud[:, 3],
-            'snr': pointCloud[:, 4],
-        })
 
-        # Stack the X, Y, Z columns to form the point cloud shape (N, 3)
-        pointCloud1 = np.vstack((df['X'], df['Y'], df['Z'], df['velocity'])).T
+            if frame_timestamp:
+                pass
+            else:
+                frame_timestamp = "No timestamp available"
+            # Create a DataFrame for the point cloud
+            df = pd.DataFrame({
+                'frame_timestamp': frame_timestamp,
+                'Frame Number': frameNumber,
+                'X': pointCloud[:, 0],
+                'Y': pointCloud[:, 1],
+                'Z': pointCloud[:, 2],
+                'velocity': pointCloud[:, 3],
+                'snr': pointCloud[:, 4],
+            })
 
-        # Check if previous_df is empty (first frame case)
-        if previous_df.empty:
-            previous_df = df
+            # Log the frame number
+            processed_frame_numbers.append(frameNumber)
 
-        # Check if previous_pc is empty or has no points (first frame case)
-        if isinstance(previous_pc, str) and previous_pc == "empty" or previous_pc.size == 0:
-            previous_pc = pointCloud1
-            return
+            # Stack the X, Y, Z columns to form the point cloud shape (N, 3)
+            pointCloud1 = np.vstack((df['X'], df['Y'], df['Z'], df['velocity'])).T
 
-        # Store the current point cloud temporarily and update `previous_pc`
-        current_pc = pointCloud1
-        points = previous_pc  # Use the previous frame's points to match target IDs
-        previous_pc = current_pc  # Update previous_pc with the current point cloud for the next iteration
+            # Check if previous_df is empty (first frame case)
+            if previous_df.empty:
+                previous_df = df
 
-        # Handle cases where target indices do not match point cloud length
-        if len(targetIndices) != points.shape[0]:
-            previous_df = df
-            return
+            # Check if previous_pc is empty or has no points (first frame case)
+            if isinstance(previous_pc, str) and previous_pc == "empty" or previous_pc.size == 0:
+                previous_pc = pointCloud1
+                return
 
-        # Save the previous frame's DataFrame with the associated target IDs
-        if len(targetIndices) == len(previous_df):
-            previous_df['target_id'] = targetIndices
+            # Store the current point cloud temporarily and update `previous_pc`
+            current_pc = pointCloud1
+            points = previous_pc  # Use the previous frame's points to match target IDs
+            previous_pc = current_pc  # Update previous_pc with the current point cloud for the next iteration
+
+            # Handle cases where target indices do not match point cloud length
+            if len(targetIndices) != points.shape[0]:
+                previous_df = df
+                return
+
+            # Save the previous frame's DataFrame with the associated target IDs
+            if len(targetIndices) == len(previous_df):
+                previous_df['target_id'] = targetIndices
+            else:
+                previous_df['target_id'] = [-1] * len(previous_df)  # Assign a default value (-1) for missing target IDs
+
+            save_to_csv(previous_df, Configuration.csv_file_path_timestamp)  # Save previous_df to CSV
+            previous_df = df  # Update for the next frame
+
+            # Create a mask to filter out invalid target IDs (e.g., 253, 254, 255)
+            mask = np.array([(0 <= x <= 255) for x in targetIndices])  # True for valid IDs
+
+            # Apply the mask to filter out invalid points
+            valid_points = points[mask]  # Filtered point cloud (N, 3)
+            valid_target_ids = np.array(targetIndices)[mask]  # Corresponding valid target IDs (N,)
+
+            # Prepare the points for processing by adding the target ID as a fourth dimension
+            points_with_ids = np.hstack((valid_points, valid_target_ids[:, np.newaxis]))
+
+            z_values = valid_points[:, 2]
+            z_mean = np.mean(z_values)
+            average_zs.append(z_mean)
+            valid_points = valid_points.tolist()
+
+            if len(valid_points) == 0:
+                return
+
+            filled_frame = fill_frame(valid_points,
+                                      target_length=150)  # Now filled_frame is a raw Python list of points in ONE frame
+
+            if df.empty:
+                pass
+            else:
+                current_window_idx += 1
+                all_data_frame.append(filled_frame)
+
+            if current_window_idx == 20:
+                input = torch.Tensor(all_data_frame).unsqueeze(0).to(device)
+                output = model(input)
+                _, predicted_label = torch.max(output, 1)
+                str_class = num_to_class(predicted_label.item())
+
+                model_output_window.append(str_class)
+                current_output_index += 1
+
+                if current_output_index == 10:
+                    afterward_output = 'not assigned'
+                    if sum(1 for x in model_output_window if x in ['Falling', 'Laying']) > 4:
+                        afterward_output = 'Falling'
+                    elif sum(1 for x in model_output_window if x == 'Sitting') > 2:
+                        afterward_output = 'Sitting'
+                    else:
+                        afterward_output = 'Standing / \nWalking'
+                    print(afterward_output)  # This prints the result
+                    gui.update_indicator(afterward_output)
+
+                    # Now append it to the CSV file along with the timestamp
+                    append_to_csv(afterward_output, output_csv_file_path)
+
+                    current_output_index = 5
+                    model_output_window = model_output_window[5:]
+
+                current_window_idx = 15
+                all_data_frame = all_data_frame[5:]
+                gui.update_scatter_plot_with_colors(points_with_ids)
         else:
-            previous_df['target_id'] = [-1] * len(previous_df)  # Assign a default value (-1) for missing target IDs
-
-        save_to_csv(previous_df, csv_file_path)  # Save previous_df to CSV
-        previous_df = df  # Update for the next frame
-
-        # Create a mask to filter out invalid target IDs (e.g., 253, 254, 255)
-        mask = np.array([(0 <= x <= 255) for x in targetIndices])  # True for valid IDs
-
-        # Apply the mask to filter out invalid points
-        valid_points = points[mask]  # Filtered point cloud (N, 3)
-        valid_target_ids = np.array(targetIndices)[mask]  # Corresponding valid target IDs (N,)
-
-        # Prepare the points for processing by adding the target ID as a fourth dimension
-        points_with_ids = np.hstack((valid_points, valid_target_ids[:, np.newaxis]))
-
-        z_values = valid_points[:, 2]
-        z_mean = np.mean(z_values)
-        average_zs.append(z_mean)
-        valid_points = valid_points.tolist()
-
-        if len(valid_points) == 0:
-            return
-
-        filled_frame = fill_frame(valid_points,
-                                  target_length=150)  # Now filled_frame is a raw Python list of points in ONE frame
-
-        if df.empty:
             pass
-        else:
-            current_window_idx += 1
-            all_data_frame.append(filled_frame)
-
-        if current_window_idx == 20:
-            input = torch.Tensor(all_data_frame).unsqueeze(0).to(device)
-            output = model(input)
-            _, predicted_label = torch.max(output, 1)
-            str_class = num_to_class(predicted_label.item())
-
-            model_output_window.append(str_class)
-            current_output_index += 1
-
-            if current_output_index == 10:
-                afterward_output = 'not assigned'
-                if sum(1 for x in model_output_window if x in ['Falling', 'Laying']) > 4:
-                    afterward_output = 'Falling'
-                elif sum(1 for x in model_output_window if x == 'Sitting') > 2:
-                    afterward_output = 'Sitting'
-                else:
-                    afterward_output = 'Standing / \nWalking'
-                print(afterward_output)  # This prints the result
-                gui.update_indicator(afterward_output)
-
-                # Now append it to the CSV file along with the timestamp
-                append_to_csv(afterward_output, output_csv_file_path)
-
-                current_output_index = 5
-                model_output_window = model_output_window[5:]
-
-            current_window_idx = 15
-            all_data_frame = all_data_frame[5:]
-            gui.update_scatter_plot_with_colors(points_with_ids)
-    else:
-        pass
+    except Exception as e:
+        print(f"Error processing frame {frameNumber}: {e}")
 
 
 def close_ports(CLIport, Dataport):
@@ -465,3 +491,18 @@ def close_ports(CLIport, Dataport):
         CLIport.close()
     if Dataport and Dataport.is_open:
         Dataport.close()
+
+
+
+def generate_csv_title_timestamp():
+    dir_path = os.path.dirname(Configuration.csv_file_path)
+    # Get current time in dd_mm_ss format
+    time_str = time.strftime("%Hh_%Mm_%Ss_%d_%m_%y")
+    # Extract base file name and extension
+    base_name = os.path.basename(Configuration.csv_file_path)
+    name, ext = os.path.splitext(base_name)
+    # Create new file name with time appended
+    new_file_name = f"{name}_{time_str}{ext}"
+    # Construct full path for the new file
+    new_file_path = os.path.join(dir_path, new_file_name)
+    return new_file_path

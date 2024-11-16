@@ -10,6 +10,8 @@ model_path = config['DEFAULT'].get('model_path', './epoch155.pt')
 output_csv_file_path = config['DEFAULT'].get('output_csv_file_path', 'output/radar_output_log.csv')
 csv_file_path = config['DEFAULT'].get('csv_file_path', 'output/radar_data.csv')
 configFileName = config['DEFAULT'].get('configFileName', 'ODS_6m_staticRetention_max_acceleration_edited.cfg')
+csv_file_path_timestamp = None
+
 
 # Print out the values (optional, for debugging)
 print("Model Path:", model_path)

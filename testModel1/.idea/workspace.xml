@@ -4,7 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fb8fb78d-bff0-48c9-a32f-0cc909e4ff03" name="Changes" comment="" />
+    <list default="true" id="fb8fb78d-bff0-48c9-a32f-0cc909e4ff03" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/testModel1.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/testModel1.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Configuration.py" beforeDir="false" afterPath="$PROJECT_DIR$/Configuration.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RadarGUI.py" beforeDir="false" afterPath="$PROJECT_DIR$/RadarGUI.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_jetson.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_jetson.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/radar_data.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/radar_output_log.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -30,31 +39,31 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.Configuration.executor": "Debug",
-    "Python.GUIDEV_6843_WITHOUT_GUI_HVRAE_ppl_counting_modified_11.1.executor": "Run",
-    "Python.GUIDEV_6843_WITH_GUI_HVRAE_saad_linux.executor": "Run",
-    "Python.MySocket.executor": "Run",
-    "Python.Poinact.executor": "Run",
-    "Python.RadarGUI.executor": "Run",
-    "Python.ServerSocket.executor": "Run",
-    "Python.main_jetson.executor": "Run",
-    "Python.test.executor": "Run",
-    "Python.testUART.executor": "Run",
-    "Python.utils.executor": "Debug",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "last_opened_file_path": "/home/uottawa/PycharmProjects/testModel1/input_data",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.Configuration.executor&quot;: &quot;Debug&quot;,
+    &quot;Python.GUIDEV_6843_WITHOUT_GUI_HVRAE_ppl_counting_modified_11.1.executor&quot;: &quot;Run&quot;,
+    &quot;Python.GUIDEV_6843_WITH_GUI_HVRAE_saad_linux.executor&quot;: &quot;Run&quot;,
+    &quot;Python.MySocket.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Poinact.executor&quot;: &quot;Run&quot;,
+    &quot;Python.RadarGUI.executor&quot;: &quot;Run&quot;,
+    &quot;Python.ServerSocket.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main_jetson.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test.executor&quot;: &quot;Run&quot;,
+    &quot;Python.testUART.executor&quot;: &quot;Run&quot;,
+    &quot;Python.utils.executor&quot;: &quot;Debug&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/uottawa/PycharmProjects/testModel1/input_data&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/input_data" />
@@ -98,12 +107,12 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/utils.py</url>
-          <line>432</line>
+          <line>456</line>
           <option name="timeStamp" value="7" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/utils.py</url>
-          <line>351</line>
+          <line>366</line>
           <option name="timeStamp" value="8" />
         </line-breakpoint>
       </breakpoints>

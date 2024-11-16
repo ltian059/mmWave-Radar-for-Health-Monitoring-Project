@@ -3,16 +3,15 @@ from tkinter import font
 import time
 
 import Configuration
+import utils
 
 from utils import update, close_ports
 from Configuration import serialConfig,parseConfigFile
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from mpl_toolkits.mplot3d import Axes3D
 
 configFileName = Configuration.configFileName
-
 class RadarGUI:
     def __init__(self, root, model, device):
         self.CLIport = None
@@ -101,6 +100,7 @@ class RadarGUI:
         self.canvas.draw()
 
     def on_start(self):
+        Configuration.csv_file_path_timestamp = utils.generate_csv_title_timestamp()
         self.CLIport, self.Dataport = serialConfig(configFileName)
         config = [line.rstrip('\r\n') for line in open(self.configFileName)]
         for i in config:

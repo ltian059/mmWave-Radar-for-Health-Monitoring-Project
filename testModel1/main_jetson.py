@@ -10,6 +10,8 @@ from keras.models import Model, load_model
 from keras.callbacks import TensorBoard
 from keras.losses import MeanSquaredError
 
+import utils
+
 mse = MeanSquaredError()
 # from keras.losses import mse
 #from scipy.signal import find_peaks
@@ -744,4 +746,18 @@ atexit.register(on_exit)
 root = tk.Tk()
 gui = RadarGUI(root ,model, device)
 root.mainloop()
+
+import matplotlib.pyplot as plt
+
+def plot_frame_sequence(frame_numbers):
+    plt.figure(figsize=(10, 4))
+    plt.plot(frame_numbers, marker='o')
+    plt.title('Processed Frame Numbers Over Time')
+    plt.xlabel('Sequence Index')
+    plt.ylabel('Frame Number')
+    plt.grid(True)
+    plt.show()
+
+# Call this function at appropriate intervals or at the end of data collection
+plot_frame_sequence(utils.processed_frame_numbers)
 
