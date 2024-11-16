@@ -24,8 +24,14 @@ current_window_idx = 0
 all_data_frame = []
 fall_df = pd.DataFrame(columns = ['detected_falls_idx'])
 
+"""
+1. Process All Available Frames in Each Call
+Incorporate a while loop within readAndParseData14xx that continues processing as long as there's enough data in the buffer to form a complete frame.
+
+Return a list of all detected objects, frame numbers, and timestamps for each processed frame.
+"""
 def readAndParseData14xx(Dataport, configParameters, flush_interval=1000):
-    global byteBuffer, byteBufferLength, frame_timestamp
+    global byteBuffer, byteBufferLength
 
     # Constants
     OBJ_STRUCT_SIZE_BYTES = 12
@@ -66,6 +72,7 @@ def readAndParseData14xx(Dataport, configParameters, flush_interval=1000):
             check = byteBuffer[loc:loc + 8]
             if np.all(check == magicWord):
                 startIdx.append(loc)
+
 
         # Check that startIdx is not empty
         if startIdx:
@@ -119,17 +126,11 @@ def readAndParseData14xx(Dataport, configParameters, flush_interval=1000):
         subFrameNumber = np.matmul(byteBuffer[idX:idX + 4], word)
         idX += 4
 
-        # Get the current timestamp
-        frame_timestamp = time.time()
+        # Read the new timestamp field (4 bytes)
+        timestamp = np.matmul(byteBuffer[idX:idX + 4], word)
+        idX += 4
 
-        # Convert the timestamp to a structured time object
-        time_struct = time.localtime(frame_timestamp)
 
-        # Extract milliseconds from the fractional part of the timestamp
-        milliseconds = int((frame_timestamp - int(frame_timestamp)) * 1000)
-
-        # Format the time string
-        frame_timestamp = time.strftime("%H:%M:%S", time_struct) + f":{milliseconds:03d}"
 
         # Read the TLV messages
         for tlvIdx in range(numTLVs):
@@ -308,9 +309,12 @@ def readAndParseData14xx(Dataport, configParameters, flush_interval=1000):
             # Check that there are no errors with the buffer length
             if byteBufferLength < 0:
                 byteBufferLength = 0
-        return dataOK, frameNumber, detObj, frame_timestamp
 
-    return dataOK, frameNumber, detObj, None
+        detObj['timestamp'] = timestamp
+
+
+
+    return dataOK, frameNumber, detObj
 
 # Function to save DataFrame to CSV
 def save_to_csv(df, file_path):
@@ -362,20 +366,16 @@ def update(Dataport, configParameters, model, device, gui):
     global previous_pc, previous_df, average_zs, model_output_window, current_output_index
 
     try:
-        dataOk, frameNumber, detObj, frame_timestamp = readAndParseData14xx(Dataport, configParameters)
+        dataOk, frameNumber, detObj = readAndParseData14xx(Dataport, configParameters)
 
         if dataOk:
+            timestamp = detObj.get('timestamp', 'N/A')
             pointCloud = np.array(detObj['pointCloud'])  # (N, 5) array: X, Y, Z, velocity, snr
             targetIndices = detObj.get('targetIndices', [])  # List of target indices
 
-
-            if frame_timestamp:
-                pass
-            else:
-                frame_timestamp = "No timestamp available"
             # Create a DataFrame for the point cloud
             df = pd.DataFrame({
-                'frame_timestamp': frame_timestamp,
+                'timestamp': timestamp,
                 'Frame Number': frameNumber,
                 'X': pointCloud[:, 0],
                 'Y': pointCloud[:, 1],
@@ -477,7 +477,7 @@ def update(Dataport, configParameters, model, device, gui):
         else:
             pass
     except Exception as e:
-        print(f"Error processing frame {frameNumber}: {e}")
+        print(f"Error processing: {e}")
 
 
 def close_ports(CLIport, Dataport):

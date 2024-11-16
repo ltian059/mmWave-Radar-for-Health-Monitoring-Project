@@ -5,13 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fb8fb78d-bff0-48c9-a32f-0cc909e4ff03" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/testModel1.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/testModel1.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Configuration.py" beforeDir="false" afterPath="$PROJECT_DIR$/Configuration.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/RadarGUI.py" beforeDir="false" afterPath="$PROJECT_DIR$/RadarGUI.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_jetson.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_jetson.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/output/radar_data.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/output/radar_output_log.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/radar_output_log.csv" beforeDir="false" afterPath="$PROJECT_DIR$/output/radar_output_log.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -100,6 +95,7 @@
     <option name="version" value="3" />
   </component>
   <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.csv" />
     <option featureType="com.intellij.fileTypeFactory" implementationName="*.ini" />
   </component>
   <component name="XDebuggerManager">
@@ -112,7 +108,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/utils.py</url>
-          <line>366</line>
+          <line>370</line>
           <option name="timeStamp" value="8" />
         </line-breakpoint>
       </breakpoints>
