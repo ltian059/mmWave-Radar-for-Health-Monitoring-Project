@@ -1,3 +1,5 @@
+import time
+
 import serial
 import configparser
 
@@ -37,6 +39,24 @@ def serialConfig(configFileName):
     #     CLIport.write((i + '\n').encode())
     #     print(i)
     #     time.sleep(0.1)
+    return CLIport, Dataport
+
+def serialConfig_win(configFileName):
+    global CLIport, Dataport
+    # Open the serial ports for the configuration and the data ports
+    # Raspberry pi
+    # CLIport = serial.Serial('/dev/ttyACM0', 115200)
+    # Dataport = serial.Serial('/dev/ttyACM1', 921600)
+    # Windows
+    CLIport = serial.Serial('COM11', 115200)
+    Dataport = serial.Serial('COM7', 921600)
+
+    # Read the configuration file and send it to the board
+    config = [line.rstrip('\r\n') for line in open(configFileName)]
+    for i in config:
+        CLIport.write((i + '\n').encode())
+        print(i)
+        time.sleep(0.05)
     return CLIport, Dataport
 
 # ------------------------------------------------------------------

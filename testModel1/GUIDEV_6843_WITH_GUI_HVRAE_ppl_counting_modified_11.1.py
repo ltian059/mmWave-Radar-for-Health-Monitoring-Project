@@ -686,6 +686,10 @@ def readAndParseData14xx(Dataport, configParameters, flush_interval=1000):
         subFrameNumber = np.matmul(byteBuffer[idX:idX+4], word)
         idX += 4
 
+        # Read the new timestamp field (4 bytes)
+        # timestamp = np.matmul(byteBuffer[idX:idX + 4], word)
+        # idX += 4
+
         # Read the TLV messages
         for tlvIdx in range(numTLVs):
             word = [1, 2**8, 2**16, 2**24]
@@ -861,6 +865,8 @@ def readAndParseData14xx(Dataport, configParameters, flush_interval=1000):
             # Check that there are no errors with the buffer length
             if byteBufferLength < 0:
                 byteBufferLength = 0
+        # detObj['timestamp'] = timestamp
+
 
     return dataOK, frameNumber, detObj
 
@@ -1302,8 +1308,9 @@ window = 20
 current_window_idx = 0
 all_data_frame = []
 fall_df = pd.DataFrame(columns = ['detected_falls_idx'])
+sys.path.append('./lib')
 
-model = torch.load(r'./epoch155.pt', map_location=torch.device('cpu'))
+model = torch.load(r'./lib/epoch155.pt', map_location=torch.device('cpu'))
 
 model.eval()
 device=torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -1336,11 +1343,13 @@ def update():
 
     if radar_gui.is_recording:
         if dataOk:
+            timestamp = detObj.get('timestamp', 'N/A')
             pointCloud = np.array(detObj['pointCloud'])  # (N, 5) array: X, Y, Z, velocity, snr
             targetIndices = detObj.get('targetIndices', [])  # List of target indices
             
             # Create a DataFrame for the point cloud
             df = pd.DataFrame({
+                # 'timestamp': timestamp,
                 'Frame Number': frameNumber,
                 'X': pointCloud[:, 0],
                 'Y': pointCloud[:, 1],
@@ -1448,7 +1457,6 @@ def update():
             QtGui.QGuiApplication.processEvents()
     else:
         pass
-
 def close_ports():
     if CLIport and CLIport.is_open:
         CLIport.write('sensorStop\n'.encode())
@@ -1459,8 +1467,15 @@ def close_ports():
     if Dataport and Dataport.is_open:
         Dataport.close()
 
-atexit.register(close_ports)
 
+atexit.register(close_ports)
+import signal
+
+def signal_handler(sig, frame):
+    close_ports()
+    sys.exit(0)
+
+signal.signal(signal.SIGINT, signal_handler)
 ##############################################
 # Set up the serial connection and radar configuration parameters
 CLIport, Dataport = serialConfig(configFileName)
@@ -1471,6 +1486,8 @@ app = QtWidgets.QApplication([])
 radar_gui = RadarGUI()
 radar_gui.setWindowTitle('3D Radar Scatter Plot')
 radar_gui.show()
+
+app.aboutToQuit.connect(close_ports)
 
 # Connect the update function to a timer for periodic updates
 timer = QtCore.QTimer()
